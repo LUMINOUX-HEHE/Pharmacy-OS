@@ -1,10 +1,10 @@
 import Queue from "bull";
 
-import { env, isTest } from "../config/env.js";
+import { env, isTest, isVercel } from "../config/env.js";
 import { logger } from "../config/logger.js";
 
 const createQueue = <TData = unknown>(name: string): Queue.Queue<TData> => {
-  if (isTest) {
+  if (isTest || isVercel) {
     return {
       name,
       add: async (jobName: string, data: TData) =>
@@ -13,7 +13,9 @@ const createQueue = <TData = unknown>(name: string): Queue.Queue<TData> => {
           name: jobName,
           data
         }) as unknown as Queue.Job<TData>,
-      close: async () => undefined
+      close: async () => undefined,
+      on: () => undefined,
+      process: () => undefined
     } as unknown as Queue.Queue<TData>;
   }
 

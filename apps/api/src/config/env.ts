@@ -31,3 +31,4 @@ export const env = envSchema.parse(process.env);
 
 export const isProduction = env.NODE_ENV === "production";
 export const isTest = env.NODE_ENV === "test";
+export const isVercel = process.env.VERCEL === "1";
